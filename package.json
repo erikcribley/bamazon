@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/erikcribley/bamazon#readme",
   "dependencies": {
-    "inquire": "^0.4.8",
+    "inquirer": "^6.5.0",
     "mysql": "^2.17.1"
   }
 }
