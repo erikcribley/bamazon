@@ -11,6 +11,7 @@ let connection = mysql.createConnection({
     database: 'bamazon'
 })
 
+//view all product
 function viewProducts () {
     let query = "SELECT * FROM products"
     connection.query(query, function(err, res) {
@@ -26,9 +27,12 @@ function viewProducts () {
                 res[i].stock_quantity
             )
         }
+        connection.end()
     })
+
 }
 
+//view low inventory
 function viewLow () {
     let query = "SELECT * FROM products WHERE stock_quantity < 5"
     connection.query(query, function(err, res) {
@@ -43,10 +47,44 @@ function viewLow () {
                 res[i].price + " | " +
                 res[i].stock_quantity
             )
-        } 
+        }
+        connection.end() 
     })
 }
 
+//add to inventory
+function addInventory () {
+    inquirer
+        .prompt([
+            {
+                type: "input",
+                message: "Please Enter the Item ID number",
+                name: "itemID"
+            },
+            {
+                type: "input",
+                message: "How many units would you like to add?",
+                name: "unitsAdded"
+            }
+        ])
+        .then(function(answer) {
+            let query = "UPDATE products SET stock_quantity = stock_quantity +? WHERE item_id =?"
+            connection.query(query, [answer.unitsAdded, answer.itemID], function(err, res) {
+                if (err) {
+                    throw err
+                }
+                console.log("Inventory Updated")
+                connection.end()
+            })
+        })
+}
+
+//add new product
+function addProduct() {
+    
+}
+
+//inquirer menu
 function managerOptions () {
     inquirer
         .prompt([
@@ -58,7 +96,8 @@ function managerOptions () {
                     "View Products for Sale",
                     "View Low Inventory",
                     "Add to Inventory",
-                    "Add New Product"
+                    "Add New Product",
+                    "Exit"
                 ],
             }
         ])
@@ -71,10 +110,13 @@ function managerOptions () {
                     viewLow();
                     break;
                 case "Add to Inventory":
-                    console.log("add inventory")
+                    addInventory();
                     break;
                 case "Add New Product":
-                    console.log("add new")
+                    addProduct();
+                    break;
+                case "Exit":
+                    connection.end()
                     break;
             }
         })

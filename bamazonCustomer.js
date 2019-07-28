@@ -13,7 +13,7 @@ let connection = mysql.createConnection({
 
 //reduce stock from database, returning total price
 function reduceStock (id, units, r) {
-    let query = "UPDATE products SET stock_quantity =? WHERE item_id=?"
+    let query = "UPDATE products SET stock_quantity =? WHERE item_id =?"
     connection.query(query, [r.stock_quantity - units, id], function(err, res) {
         if (err) {
             throw err
