@@ -47,12 +47,44 @@ function viewLow () {
     })
 }
 
+function managerOptions () {
+    inquirer
+        .prompt([
+            {
+                name: "task",
+                type: "list",
+                message: "How are You Managing?",
+                choices:[
+                    "View Products for Sale",
+                    "View Low Inventory",
+                    "Add to Inventory",
+                    "Add New Product"
+                ],
+            }
+        ])
+        .then(function(answer) {
+            switch (answer.task) {
+                case "View Products for Sale":
+                    viewProducts();
+                    break;
+                case "View Low Inventory":
+                    viewLow();
+                    break;
+                case "Add to Inventory":
+                    console.log("add inventory")
+                    break;
+                case "Add New Product":
+                    console.log("add new")
+                    break;
+            }
+        })
+}
+
 //run
 connection.connect(function(err) {
     if (err) {
         throw err
     }
     console.log("connected as id " + connection.threadId)
+    managerOptions()
 })
-
-viewLow()
