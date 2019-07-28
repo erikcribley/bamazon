@@ -11,22 +11,23 @@ let connection = mysql.createConnection({
     database: 'bamazon'
 })
 
-//reduce stock
+//reduce stock from database, returning total price
 function reduceStock (id, units, r) {
-    connection.query("UPDATE products SET stock_quantity =? WHERE item_id=?", 
-                    [r.stock_quantity - units, id], 
-                    function(err, res) {
+    let query = "UPDATE products SET stock_quantity =? WHERE item_id=?"
+    connection.query(query, [r.stock_quantity - units, id], function(err, res) {
         if (err) {
             throw err
         }
         let price = r.price * units
         console.log("Total Price: " + price)
+        connection.end()
     })
 }
 
-//removing purchased product from database
-function checkStock (id, units) { 
-    connection.query("SELECT * FROM products WHERE item_id =?", id , function(err, res) {
+//checking quantity in database
+function checkStock (id, units) {
+    let query = "SELECT * FROM products WHERE item_id =?"
+    connection.query(query, id , function(err, res) {
         if (err) {
             throw err
         }
@@ -34,6 +35,7 @@ function checkStock (id, units) {
            reduceStock(id, units, res[0])
         } else {
             console.log("Insufficient Quantity!")
+            connection.end()
         }
     })
 }
@@ -60,23 +62,25 @@ function makePurchase () {
 
 //display all items
 function displayAll () {
-    connection.query("SELECT * FROM products", function(err, res) {
+    let query = "SELECT * FROM products"
+    connection.query(query, function(err, res) {
         if (err) {
             throw err
         }
-        // console.log(res)
         for (i = 0; i < res.length; i++) {
-            console.log(res[i].item_id + " | " + 
-                        res[i].product_name + " | " +
-                        res[i].department_name + " | " +
-                        res[i].price + " | " +
-                        res[i].stock_quantity)
+            console.log(
+                res[i].item_id + " | " + 
+                res[i].product_name + " | " +
+                res[i].department_name + " | " +
+                res[i].price + " | " +
+                res[i].stock_quantity
+            )
         }
         makePurchase()
     })
 }
 
-//check connection
+//run
 connection.connect(function(err) {
     if (err) {
         throw err
