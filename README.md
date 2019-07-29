@@ -13,7 +13,7 @@ the userID. If the unitsSold exceeds the stock_quantity, "Insufficent Quantity!"
 
 ![table display in console w/prompts, returning insufficient quantity](/images/out-of-stock.png)
 
-If the unitsSold is less than or equal to stock_quantity, the reduceStock is called, passing the itemID, unitsSold, and 
+If the unitsSold is less than or equal to stock_quantity, the reduceStock function is called, passing the itemID, unitsSold, and 
 res parameters. 
 
 The reduceStock function reduces the stock_quantity column of the corresponding itemID by the unitsSold. The unitsSold
@@ -50,7 +50,7 @@ have been added to stock.
 
 ![product added to inventory](/images/add-to-stock.png)
 
-The final task "Add New Product" runs the addProduct function whihc prompts the user to input the product name, department
+The final task "Add New Product" runs the addProduct function which prompts the user to input the product name, department
 name, price, and stock quantity of the new product. This information is inserted as a new record onto the properties table,
 a new item_id number is generated with auto increment. "Product Added" is returned and the connection ends.
 
