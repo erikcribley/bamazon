@@ -81,10 +81,50 @@ function addInventory () {
 
 //add new product
 function addProduct() {
-    
+    inquirer
+        .prompt([
+            {
+                type: "input",
+                message: "Enter Product Name",
+                name: "product"
+            },
+            {
+                type: "input",
+                message: "Enter Department Name",
+                name: "department"
+            },
+            {
+                type: "input",
+                message: "Enter Price",
+                name: "price"
+            },
+            {
+                type: "input",
+                message: "Enter Quantity",
+                name: "quantity"
+            }
+        ])   
+        .then(function(answer) {
+            let query = "INSERT INTO products SET ?"
+                connection.query(
+                    query,
+                    {
+                    product_name: answer.product, 
+                    department_name: answer.department, 
+                    price: answer.price, 
+                    stock_quantity: answer.quantity,
+                    },
+                    function(err, res) {
+                    if (err) {
+                        throw err
+                    }    
+                    console.log("Product Added")
+                    connection.end()    
+                })
+        })
 }
 
-//inquirer menu
+//manager menu
 function managerOptions () {
     inquirer
         .prompt([
